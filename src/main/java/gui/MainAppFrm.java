@@ -138,11 +138,28 @@ public class MainAppFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMedicamentoActionPerformed
 
     private void btnRecordatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordatorioActionPerformed
-        // TODO add your handling code here:
+//        // TODO add your handling code here:
+//        int filaSeleccionada = tablaMedicamentos.getSelectedRow();
+//
+//    // Verificar si hay una fila seleccionada
+//    if (filaSeleccionada != -1) {
+//        // Obtener datos de la fila seleccionada
+//        Object nombre = tablaMedicamentos.getValueAt(filaSeleccionada, 0);
+//        Object dosis = tablaMedicamentos.getValueAt(filaSeleccionada, 1);
+//        Object frecuencia = tablaMedicamentos.getValueAt(filaSeleccionada, 2);
+//
+//        
+//    } else {
+//        // No hay fila seleccionada, puedes mostrar un mensaje de advertencia
+//        System.out.println("Por favor, selecciona un medicamento de la tabla.");
+//    }
     }//GEN-LAST:event_btnRecordatorioActionPerformed
 
     private void btnNotificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificacionActionPerformed
         // TODO add your handling code here:
+        NotificacionFrame frame = new NotificacionFrame(this.usuarioActual);
+        this.dispose();
+        frame.setVisible(true);
     }//GEN-LAST:event_btnNotificacionActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
