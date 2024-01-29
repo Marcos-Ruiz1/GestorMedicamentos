@@ -22,6 +22,10 @@ public class NotificacionManager {
         this.timer = new Timer();
     }
     
+    /**
+     * 
+     * @param fechaHora 
+     */
     public void programarNotificacionPersonalizada(LocalDateTime fechaHora) {
         
        // Obtén la diferencia en milisegundos entre la fecha y hora actual y la fecha y hora proporcionadas
@@ -37,6 +41,10 @@ public class NotificacionManager {
         return duration.toMillis();
     }
     
+    /**
+     * 
+     * @param mensaje 
+     */
     private void mostrarNotificacion(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Notificación", JOptionPane.INFORMATION_MESSAGE);
     }

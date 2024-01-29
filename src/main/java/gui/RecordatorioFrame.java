@@ -4,16 +4,31 @@
  */
 package gui;
 
+import dominio.Medicamento;
+import dominio.Usuario;
+import javax.swing.JOptionPane;
+import utilerias.RecordatorioManager;
+
 /**
  *
  * @author marco
  */
 public class RecordatorioFrame extends javax.swing.JFrame {
 
+    Medicamento medicamentoSeleccionado;
+    Usuario usuarioActual;
+    RecordatorioManager recordatorioManager;
     /**
      * Creates new form RecordatorioFrame
      */
     public RecordatorioFrame() {
+        initComponents();
+    }
+    
+    public RecordatorioFrame(Usuario usuarioActual, Medicamento medicamentoSeleccionado){
+        this.medicamentoSeleccionado = medicamentoSeleccionado;
+        this.usuarioActual = usuarioActual;
+        recordatorioManager = new RecordatorioManager(this.medicamentoSeleccionado);
         initComponents();
     }
 
@@ -91,16 +106,31 @@ public class RecordatorioFrame extends javax.swing.JFrame {
 
     private void btnSemanalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSemanalActionPerformed
         // TODO add your handling code here:
+        recordatorioManager.recordatorioSemanal();
+        MainAppFrm frame = new MainAppFrm(this.usuarioActual);
+        this.dispose();
+        frame.setVisible(true);
     }//GEN-LAST:event_btnSemanalActionPerformed
 
     private void btnDiarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiarioActionPerformed
         // TODO add your handling code here:
+        recordatorioManager.recordatorioDiario();
+        MainAppFrm frame = new MainAppFrm(this.usuarioActual);
+        this.dispose();
+        frame.setVisible(true);
     }//GEN-LAST:event_btnDiarioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
+        MainAppFrm frame = new MainAppFrm(this.usuarioActual);
+        this.dispose();
+        frame.setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void mostrarNotificacion(String mensaje) {
+        JOptionPane.showMessageDialog(null, mensaje, "Notificación", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     /**
      * @param args the command line arguments
      */

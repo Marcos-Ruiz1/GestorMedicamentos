@@ -19,8 +19,8 @@ public class MedicamentoBo {
          return medicamentoDao.insertar(medicamentoInsertar);
      }
      
-     public Medicamento buscar(Long id){
+     public Medicamento buscar(String nombre,Long idUsuario){
          
-         return medicamentoDao.buscar(id);
+         return medicamentoDao.buscar(nombre, idUsuario);
      }
 }

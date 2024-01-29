@@ -5,7 +5,9 @@
 package gui;
 import dominio.Medicamento;
 import dominio.Usuario;
+import static java.awt.image.ImageObserver.HEIGHT;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import negocio.MedicamentoBo;
 import negocio.UsuarioBo;
@@ -16,6 +18,7 @@ import negocio.UsuarioBo;
 public class MainAppFrm extends javax.swing.JFrame {
 
     Usuario usuarioActual;
+    MedicamentoBo medicamentoBo;
     /**
      * Creates new form MainAppFrm
      */
@@ -25,6 +28,7 @@ public class MainAppFrm extends javax.swing.JFrame {
     
     public MainAppFrm(Usuario usuarioActual) {
         this.usuarioActual = usuarioActual;
+        this.medicamentoBo = new MedicamentoBo();
         initComponents();
         cargarDatosEnTabla();
     }
@@ -138,21 +142,17 @@ public class MainAppFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarMedicamentoActionPerformed
 
     private void btnRecordatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordatorioActionPerformed
-//        // TODO add your handling code here:
-//        int filaSeleccionada = tablaMedicamentos.getSelectedRow();
-//
-//    // Verificar si hay una fila seleccionada
-//    if (filaSeleccionada != -1) {
-//        // Obtener datos de la fila seleccionada
-//        Object nombre = tablaMedicamentos.getValueAt(filaSeleccionada, 0);
-//        Object dosis = tablaMedicamentos.getValueAt(filaSeleccionada, 1);
-//        Object frecuencia = tablaMedicamentos.getValueAt(filaSeleccionada, 2);
-//
-//        
-//    } else {
-//        // No hay fila seleccionada, puedes mostrar un mensaje de advertencia
-//        System.out.println("Por favor, selecciona un medicamento de la tabla.");
-//    }
+
+        if(verificarSeleccionItem()){
+            Medicamento medicamentoSeleccionado = obtenerMedicamentoDeTabla();
+            
+            RecordatorioFrame frame = new RecordatorioFrame(this.usuarioActual, medicamentoSeleccionado);
+            this.dispose();
+            frame.setVisible(true);
+        }else{
+            mostrarMensaje("No medicamento seleccionado para asignar recordatorio");
+        }
+        
     }//GEN-LAST:event_btnRecordatorioActionPerformed
 
     private void btnNotificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificacionActionPerformed
@@ -169,6 +169,9 @@ public class MainAppFrm extends javax.swing.JFrame {
         frame.setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    /**
+     * 
+     */
     private void cargarDatosEnTabla() {
         
         List<Medicamento> medicamentos = usuarioActual.getMedicamentos();
@@ -184,6 +187,41 @@ public class MainAppFrm extends javax.swing.JFrame {
         }
 
         tablaMedicamentos.setModel(modeloTabla);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private Medicamento obtenerMedicamentoDeTabla(){
+        // Obtener datos de la fila seleccionada
+        int filaSeleccionada = tablaMedicamentos.getSelectedRow();
+        
+        Object nombre = tablaMedicamentos.getValueAt(filaSeleccionada, 0);
+        Medicamento medicamentoSeleccionado = medicamentoBo.buscar(nombre.toString(), this.usuarioActual.getId());
+
+        return medicamentoSeleccionado;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private boolean verificarSeleccionItem(){
+        int filaSeleccionada = tablaMedicamentos.getSelectedRow();
+
+        if (filaSeleccionada != -1) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 
+     * @param Mensaje 
+     */
+    private void mostrarMensaje(String Mensaje){
+        JOptionPane.showMessageDialog(null, Mensaje, "Alerta", HEIGHT);
     }
     
     /**

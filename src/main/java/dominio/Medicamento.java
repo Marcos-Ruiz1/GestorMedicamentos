@@ -75,5 +75,13 @@ public class Medicamento {
     public void setFrecuencia(float frecuencia) {
         this.frecuencia = frecuencia;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
     
 }

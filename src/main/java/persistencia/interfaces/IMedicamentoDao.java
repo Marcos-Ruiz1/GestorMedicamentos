@@ -11,5 +11,5 @@ import dominio.Medicamento;
 public interface IMedicamentoDao {
     
     public Medicamento insertar(Medicamento medicamentoInsertar);
-    public Medicamento buscar(Long medicamentoBuscar);
+    public Medicamento buscar(String nombre, Long idUsuario);
 }
