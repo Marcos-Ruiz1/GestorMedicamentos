@@ -3,9 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui;
+
 import dominio.Usuario;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import negocio.UsuarioBo;
+
 /**
  *
  * @author marco
@@ -13,12 +20,15 @@ import negocio.UsuarioBo;
 public class RegistrarFrm extends javax.swing.JFrame {
 
     UsuarioBo usuarioBo;
+
     /**
      * Creates new form RegistrarFrm
      */
     public RegistrarFrm() {
+
         usuarioBo = new UsuarioBo();
         initComponents();
+
     }
 
     /**
@@ -88,24 +98,36 @@ public class RegistrarFrm extends javax.swing.JFrame {
         txtNombre.setBackground(new java.awt.Color(255, 255, 255));
         txtNombre.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
-        txtNombre.setText("nombre...");
         txtNombre.setBorder(null);
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 250, 30));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 260, -1));
 
         txtCorreo.setBackground(new java.awt.Color(255, 255, 255));
         txtCorreo.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtCorreo.setForeground(new java.awt.Color(0, 0, 0));
-        txtCorreo.setText("Correo...");
         txtCorreo.setBorder(null);
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 260, -1));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 270, -1));
 
         txtPassword.setBackground(new java.awt.Color(255, 255, 255));
         txtPassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(0, 0, 0));
-        txtPassword.setText("jPasswordField1");
         txtPassword.setBorder(null);
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 260, -1));
         jPanel1.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 270, -1));
 
@@ -147,16 +169,58 @@ public class RegistrarFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        // Verificar si el correo contiene al menos un símbolo '@'
+        String correo = txtCorreo.getText();
+
+        if (!correo.contains("@")) {
+            // Mostrar un JOptionPane indicando que el correo debe contener '@'
+            JOptionPane.showMessageDialog(this, "El correo debe contener al menos un símbolo '@'.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de correo
+            txtCorreo.setText("");
+
+            // Detener la ejecución del método
+            return;
+        }
+
+        // Verificar si el campo de nombre contiene solo letras y espacios
+        String nombre = txtNombre.getText();
+
+        if (!nombre.matches("[a-zA-Z ]+")) {
+            // Mostrar un JOptionPane indicando que el nombre debe contener solo letras y espacios
+            JOptionPane.showMessageDialog(this, "El nombre debe contener solo letras y espacios.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de nombre
+            txtNombre.setText("");
+
+            // Detener la ejecución del método
+            return;
+        }
+
+        // Verificar la contraseña
+        char[] passwordChars = txtPassword.getPassword();
+        String password = new String(passwordChars);
+
+        if (password.trim().isEmpty() || !password.matches("^(?=.*[0-9].*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\",.<>/?]).{5,}$")) {
+            // Mostrar un JOptionPane indicando los requisitos de contraseña
+            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 5 dígito, una letra mayúscula, dos números y un signo.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de contraseña
+            txtPassword.setText("");
+
+            // Detener la ejecución del método
+            return;
+        }
+
+        // Resto del código para registrar el usuario
         Home frame = new Home();
-        char[] password = txtPassword.getPassword();
-        String passwordString = new String(password);
-        Usuario usuarioNuevo = new Usuario(txtNombre.getText(), txtCorreo.getText(), passwordString);
+        Usuario usuarioNuevo = new Usuario(nombre, correo, password);
         usuarioBo.insertar(usuarioNuevo);
         this.mostrarNotificacion("Usuario registrado");
         frame.setVisible(true);
         this.dispose();
-        
+
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -165,10 +229,55 @@ public class RegistrarFrm extends javax.swing.JFrame {
         this.dispose();
         frame.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+// Método para manejar el evento keyTyped del campo de texto
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {
+        char c = evt.getKeyChar();
+
+        // Verificar si el carácter es una letra o espacio en blanco
+        if (!(Character.isLetter(c) || Character.isWhitespace(c))) {
+            // Mostrar un JOptionPane indicando que solo se permiten letras y espacios
+            JOptionPane.showMessageDialog(this, "Solo se permiten letras y espacios en el nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Consumir el evento para que el carácter no se inserte en el campo de texto
+            evt.consume();
+
+        }
+    }
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // Agregar un KeyListener para filtrar los caracteres
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // Verificar si el correo contiene al menos un símbolo '@'
+        String correo = txtCorreo.getText();
+
+        if (!correo.contains("@")) {
+            // Mostrar un JOptionPane indicando que el correo debe contener '@'
+            JOptionPane.showMessageDialog(this, "El correo debe contener al menos un símbolo '@'.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de correo
+            txtCorreo.setText("");
+        } else {
+            // El correo es válido, puedes realizar más acciones si es necesario
+        }
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void mostrarNotificacion(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Notificación", JOptionPane.INFORMATION_MESSAGE);
     }
+
     /**
      * @param args the command line arguments
      */

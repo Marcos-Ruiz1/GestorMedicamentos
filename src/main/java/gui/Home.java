@@ -97,7 +97,6 @@ public class Home extends javax.swing.JFrame {
         txtCorreo.setBackground(new java.awt.Color(255, 255, 255));
         txtCorreo.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtCorreo.setForeground(new java.awt.Color(0, 0, 0));
-        txtCorreo.setText("ingresar correo...");
         txtCorreo.setBorder(null);
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -109,8 +108,12 @@ public class Home extends javax.swing.JFrame {
         txtPassword.setBackground(new java.awt.Color(255, 255, 255));
         txtPassword.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(0, 0, 0));
-        txtPassword.setText("jPasswordField1");
         txtPassword.setBorder(null);
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
 
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -197,6 +200,10 @@ public class Home extends javax.swing.JFrame {
             frame.setVisible(true);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     
     private void mostrarMensaje(String Mensaje){

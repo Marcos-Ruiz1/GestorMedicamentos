@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui;
+
 import dominio.Usuario;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import javax.swing.JOptionPane;
 import utilerias.NotificacionManager;
+
 /**
  *
  * @author marco
@@ -19,10 +21,11 @@ public class NotificacionFrame extends javax.swing.JFrame {
     private Usuario usuarioActual;
     private LocalDateTime fechaHora;
     private NotificacionManager notificacion;
-    
-    public NotificacionFrame(){
+
+    public NotificacionFrame() {
         initComponents();
     }
+
     /**
      * Creates new form NotificacionFrame
      */
@@ -110,11 +113,26 @@ public class NotificacionFrame extends javax.swing.JFrame {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         // TODO add your handling code here:
         this.fechaHora = calendario.getDateTimePermissive();
+
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        // Validar que la fecha seleccionada no sea anterior a la fecha actual
+        if (fechaHora.isBefore(fechaHoraActual)) {
+            mostrarNotificacion("Error: La fecha seleccionada no puede ser anterior a la fecha actual.");
+            return; // Detener la ejecución del método
+        }
+
+        // Validar que la fecha seleccionada no sea a una hora antes de la hora actual
+        if (fechaHora.isBefore(fechaHoraActual.plusHours(1))) {
+            mostrarNotificacion("Error: La fecha seleccionada no puede ser a una hora antes de la hora actual.");
+            return; // Detener la ejecución del método
+        }
+
         System.out.println(LocalDateTime.now());
         System.out.println(this.fechaHora);
         this.notificacion.programarNotificacionPersonalizada(this.fechaHora);
         mostrarNotificacion("Notificación creada Exitosamente");
-        
+
         MainAppFrm frame = new MainAppFrm(this.usuarioActual);
         this.dispose();
         frame.setVisible(true);
@@ -123,6 +141,7 @@ public class NotificacionFrame extends javax.swing.JFrame {
     private void mostrarNotificacion(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Notificación", JOptionPane.INFORMATION_MESSAGE);
     }
+
     /**
      * @param args the command line arguments
      */

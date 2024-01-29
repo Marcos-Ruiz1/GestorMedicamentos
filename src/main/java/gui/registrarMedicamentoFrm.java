@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui;
+
 import dominio.*;
 import javax.swing.JOptionPane;
 import negocio.*;
+
 /**
  *
  * @author marco
@@ -14,12 +16,14 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
 
     Usuario usuarioActual;
     MedicamentoBo medicamentoBo;
+
     /**
      * Creates new form registrarMedicamentoFrm
      */
     public registrarMedicamentoFrm() {
         initComponents();
     }
+
     public registrarMedicamentoFrm(Usuario usuarioActual) {
         medicamentoBo = new MedicamentoBo();
         this.usuarioActual = usuarioActual;
@@ -46,6 +50,7 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         txtDosis = new javax.swing.JTextField();
         txtFrecuencia = new javax.swing.JTextField();
+        RegresarBoton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,7 +65,7 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, -1, -1));
 
         btnRegistrar.setBackground(new java.awt.Color(0, 0, 255));
         btnRegistrar.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N
@@ -111,17 +116,40 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
         txtNombre.setBackground(new java.awt.Color(255, 255, 255));
         txtNombre.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 210, -1));
 
         txtDosis.setBackground(new java.awt.Color(255, 255, 255));
         txtDosis.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtDosis.setForeground(new java.awt.Color(0, 0, 0));
+        txtDosis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDosisActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtDosis, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 90, -1));
 
         txtFrecuencia.setBackground(new java.awt.Color(255, 255, 255));
         txtFrecuencia.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         txtFrecuencia.setForeground(new java.awt.Color(0, 0, 0));
+        txtFrecuencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFrecuenciaActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtFrecuencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 90, -1));
+
+        RegresarBoton.setText("Regresar");
+        RegresarBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegresarBotonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RegresarBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,27 +175,127 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        
         String nombre = txtNombre.getText();
-        float dosis = Float.parseFloat(txtDosis.getText());
-        float frecuencia = Float.parseFloat(txtFrecuencia.getText());
+        String dosisText = txtDosis.getText();
+        String frecuenciaText = txtFrecuencia.getText();
+
+        // Validar que todos los campos estén completos
+        if (nombre.isEmpty() || dosisText.isEmpty() || frecuenciaText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Detener la ejecución del método si algún campo está vacío
+        }
+
+        // Validar que el nombre solo contenga letras y espacios
+        if (!nombre.matches("^[a-zA-Z ]+$")) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede contener dígitos ni caracteres especiales.", "Error", JOptionPane.ERROR_MESSAGE);
+            txtNombre.setText("");
+            return; // Detener la ejecución del método
+        }
+
+        float dosis;
+
+        // Validar la dosis
+        if (!dosisText.matches("\\d*\\.?\\d+")) {
+            // Si la dosis no es un número válido, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "La dosis debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de dosis
+            txtDosis.setText("");
+            return; // Detener la ejecución del método
+        } else {
+            dosis = Float.parseFloat(dosisText);
+        }
+
+        float frecuencia;
+
+        // Validar la frecuencia
+        if (!frecuenciaText.matches("\\d*\\.?\\d+")) {
+            // Si la frecuencia no es un número válido, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "La frecuencia debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de frecuencia
+            txtFrecuencia.setText("");
+            return; // Detener la ejecución del método
+        } else {
+            frecuencia = Float.parseFloat(frecuenciaText);
+        }
+
         Medicamento medicamentoNuevo = new Medicamento(nombre, dosis, frecuencia, this.usuarioActual);
         Medicamento medicamento = medicamentoBo.insertar(medicamentoNuevo);
         this.usuarioActual.getMedicamentos().add(medicamento);
-        
-        if(medicamento != null){
+
+        if (medicamento != null) {
             mostrarNotificacion("Medicamento Registrado");
             this.dispose();
             MainAppFrm frame = new MainAppFrm(this.usuarioActual);
             frame.setVisible(true);
-        }else{
-            mostrarNotificacion("Error al registar medicamento");
+        } else {
+            mostrarNotificacion("Error al registrar medicamento");
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void RegresarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarBotonActionPerformed
+        // Abrir la interfaz MainAppFrm al hacer clic en el botón "Regresar"
+        MainAppFrm frame = new MainAppFrm(usuarioActual);
+
+        // Cambiar el color de fondo a azul
+        RegresarBoton.setBackground(new java.awt.Color(0, 0, 255));
+
+        // Cambiar el color de la fuente a blanco
+        RegresarBoton.setForeground(new java.awt.Color(255, 255, 255));
+
+        this.dispose();
+        frame.setVisible(true);
+
+
+    }//GEN-LAST:event_RegresarBotonActionPerformed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // Obtener el texto del campo de nombre
+        String nombre = txtNombre.getText();
+
+        // Verificar si el nombre contiene dígitos o signos
+        if (nombre.matches(".*\\d.*") || !nombre.matches("[a-zA-Z ]+")) {
+            // Si contiene dígitos o signos, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "El nombre no puede contener dígitos ni signos.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de nombre
+            txtNombre.setText("");
+        }
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void txtDosisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDosisActionPerformed
+        // Obtener el texto del campo de dosis
+        String dosisText = txtDosis.getText();
+
+        // Verificar si la dosis contiene caracteres no numéricos
+        if (!dosisText.matches("\\d*\\.?\\d+")) {
+            // Si contiene caracteres no numéricos, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "La dosis debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de dosis
+            txtDosis.setText("");
+        }
+    }//GEN-LAST:event_txtDosisActionPerformed
+
+    private void txtFrecuenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFrecuenciaActionPerformed
+        // Obtener el texto del campo de frecuencia
+        String frecuenciaText = txtFrecuencia.getText();
+
+        // Verificar si la frecuencia contiene caracteres no numéricos
+        if (!frecuenciaText.matches("\\d*\\.?\\d+")) {
+            // Si contiene caracteres no numéricos, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "La frecuencia debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            // Limpiar el campo de frecuencia
+            txtFrecuencia.setText("");
+        }
+    }//GEN-LAST:event_txtFrecuenciaActionPerformed
 
     private void mostrarNotificacion(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Notificación", JOptionPane.INFORMATION_MESSAGE);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -204,6 +332,7 @@ public class registrarMedicamentoFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton RegresarBoton;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
